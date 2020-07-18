@@ -41,13 +41,14 @@
 				</tr>
 			</tbody>
 		</table>
-		<ul class="pagination">
-			<li class="pagination-item"><button @click="switchPage(first_page_number)" class="pagination-control">First</button></li>
-			<li class="pagination-item"><button class="pagination-control">Previous</button></li>
-			<li class="pagination-item"><input class="pagination-control" type="number"></li>
-			<li class="pagination-item"><button class="pagination-control">Enter</button></li>
-			<li class="pagination-item"><button class="pagination-control">Next</button></li>
-			<li class="pagination-item"><button @click="switchPage(last_page_number)" class="pagination-control">Last</button></li>
+		<ul v-show="pages.length > 1" class="pagination">
+			<li class="pagination-item"><button :disabled="isFirstPage" @click="switchPage(first_page_number)" class="pagination-control">First</button></li>
+			<li class="pagination-item"><button :disabled="isFirstPage" @click="previousPage" class="pagination-control">Previous</button></li>
+			<li class="pagination-item"><input v-model.trim="input_page_number" :min="first_page_number + 1" :max="last_page_number + 1" class="pagination-control page-number-input" type="number"></li>
+			<li class="pagination-item"><button @click="enterPageNumber" class="pagination-control">Enter</button></li>
+			<li class="pagination-item">{{ pagoLocation }}</li>
+			<li class="pagination-item"><button :disabled="isLastPage" @click="nextPage" class="pagination-control">Next</button></li>
+			<li class="pagination-item"><button :disabled="isLastPage" @click="switchPage(last_page_number)" class="pagination-control">Last</button></li>
 		</ul>
 	</div>
 </template>
@@ -72,6 +73,7 @@ export default {
 			page_number            : 0,
 			first_page_number      : null,
 			last_page_number       : null,
+			input_page_number      : null,
 		}
 	},
 	created() {
@@ -173,9 +175,43 @@ export default {
 		getPage() {
 			return this.page;
 		},
+		nextPage() {
+			this.page_number++;
+
+			if(this.page_number > this.last_page_number) {
+				this.page_number = this.last_page_number
+			}
+			this.switchPage(this.page_number);
+		},
+		previousPage() {
+			this.page_number--;
+
+			if(this.page_number < this.first_page_number) {
+				this.page_number = this.first_page_number;
+			}
+
+			this.switchPage(this.page_number);
+		},
 		switchPage(page_number) {
-			this.displayed_rows = this.pages[page_number]
-		}
+			this.displayed_rows = this.pages[page_number];
+			this.page_number    = page_number;
+		},
+		enterPageNumber() {
+			if(this.input_page_number) {
+				this.switchPage(this.input_page_number - 1);
+			}
+		},
+	},
+	computed : {
+		isFirstPage() {
+			return this.page_number == this.first_page_number;
+		},
+		isLastPage() {
+			return this.page_number == this.last_page_number;
+		},
+		pagoLocation() {
+			return `Page ${this.page_number + 1} of ${this.last_page_number + 1}`;
+		},
 	},
 	watch : {
 		filter_row : {
@@ -238,7 +274,7 @@ table.data-table {
 }
 
 .data-table .filter-row {
-	background-image: linear-gradient(rgb(177, 176, 176), rgb(72, 72, 72));
+	background-image: linear-gradient(rgb(189, 188, 188), rgb(131, 130, 130));
 }
 
 .data-table .insert-row-button,
@@ -259,5 +295,9 @@ table.data-table {
 .pagination .pagination-item {
 	display: inline-block;
 	margin : 0 0.5rem;
+}
+
+.pagination .page-number-input {
+	width: 75px;
 }
 </style>

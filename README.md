@@ -29,4 +29,6 @@ The slot "filter_row" is where you will define what filter columns will be inclu
 	</template>
 </data-table>
 ```
+
+Exmaple video of datatable in action
 https://youtu.be/eWzW1oE0IV0

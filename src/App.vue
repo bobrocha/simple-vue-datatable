@@ -3,7 +3,6 @@
 		<data-table
 			:fields="fields"
 			:filter_row="filter_row"
-			@clearFilterRow="clearFilterRow"
 			:rows="rows"
 			:items_per_page="12"
 		>

@@ -103,7 +103,6 @@ export default {
 				this.filter_row_button_text = 'Hide Filter Row';
 			} else {
 				this.filter_row_button_text = 'Show Filter Row';
-				this.$emit('clearFilterRow');
 			}
 		},
 		filterRows(filter_row_obj) {

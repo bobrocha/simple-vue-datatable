@@ -1,5 +1,8 @@
 <template>
 	<div class="data-table-container">
+		<div class="controls">
+			<button class="filter-row-button" @click="toggleFilterRow">{{ filter_row_button_text }}</button>
+		</div>
 		<table class="data-table">
 			<thead>
 				<tr>
@@ -9,20 +12,9 @@
 						v-for="(field, id) in fields"
 						:key="id"
 					>{{ field.title }}</th>
-					<th class="control">
-						<button class="filter-row-button" @click="toggleFilterRow">{{ filter_row_button_text }}</button>
-					</th>
 				</tr>
 				<tr v-show="filter_row_toggle" class="filter-row">
 					<slot name="filter-row"></slot>
-					<th></th>
-				</tr>
-				<tr class="insert-row">
-					<slot name="insert-row"></slot>
-					<th class="control">
-						<button type="submit">Add Row</button>
-						<button>Clear</button>
-					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,10 +26,6 @@
 					v-for="(value, i) in Object.values(row)"
 					:key="i"
 				>{{ value }}</td>
-				<td class="control">
-					<button>Edit</button>
-					<button>Delete</button>
-				</td>
 				</tr>
 			</tbody>
 		</table>
@@ -56,9 +44,10 @@
 
 export default {
 	props : {
-		fields     : Array,
-		filter_row : Object,
-		rows       : Array,
+		fields         : Array,
+		filter_row     : Object,
+		rows           : Array,
+		items_per_page : Number,
 	},
 	data() {
 		return {
@@ -77,7 +66,7 @@ export default {
 		}
 	},
 	created() {
-		this.setPageSize(12);
+		this.setPageSize(this.items_per_page);
 
 		this.paginate(this.rows);
 		this.displayed_rows = this.getPage();
@@ -204,10 +193,10 @@ export default {
 	},
 	computed : {
 		isFirstPage() {
-			return this.page_number == this.first_page_number;
+			return this.page_number === this.first_page_number;
 		},
 		isLastPage() {
-			return this.page_number == this.last_page_number;
+			return this.page_number === this.last_page_number;
 		},
 		pagoLocation() {
 			return `Page ${this.page_number + 1} of ${this.last_page_number + 1}`;
@@ -257,12 +246,13 @@ table.data-table {
 	width: 100%;
 }
 
-.data-table .control {
+.data-table-container .controls {
 	text-align: center;
-	padding: 0;
+	padding: 1rem;
+	border: 1px solid #ddd;
 }
 
-.data-table .control button {
+.data-table-container .controls button {
 	border-radius: 3px;
 	border: 1px solid #ddd;
 	background-color: #dedcdc;

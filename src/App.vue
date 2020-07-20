@@ -5,12 +5,8 @@
 			:filter_row="filter_row"
 			@clearFilterRow="clearFilterRow"
 			:rows="rows"
+			:items_per_page="12"
 		>
-			<template v-slot:insert-row>
-				<th><input v-model="insert_row.month"></th>
-				<th><input v-model="insert_row.amount"></th>
-				<th><input v-model="insert_row.year"></th>
-			</template>
 			<template v-slot:filter-row>
 				<td><input v-model="filter_row.month"></td>
 				<td><input v-model="filter_row.amount"></td>
@@ -23,7 +19,7 @@
 <script>
 import DataTable from './DataTable.vue';
 
-// Fields used to buld table header with
+// Fields used to build table header with
 const fields = [
 	{
 		id    : 'month',
@@ -542,10 +538,5 @@ export default {
 			rows       : rows,
 		}
 	},
-	methods : {
-		clearFilterRow() {
-			this.filter_row = {};
-		}
-	}
 }
 </script>

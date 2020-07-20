@@ -1,24 +1,9 @@
-# datatable
+# Simple Vue DataTable
 
-## Project setup
-```
-npm install
-```
+This simple Vue datatable can be used to display paginated data. 
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Features include:
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+* Pagination
+* Sorting
+* Filtering
